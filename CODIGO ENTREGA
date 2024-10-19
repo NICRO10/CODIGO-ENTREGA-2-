@@ -1,0 +1,107 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Clase que representa un libro en la biblioteca
+class Libro {
+    String titulo;  // Título del libro
+    String autor;   // Autor del libro
+    int cantidad;   // Cantidad de ejemplares disponibles
+
+    // Constructor para inicializar un libro con su título, autor y cantidad
+    Libro(String titulo, String autor, int cantidad) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.cantidad = cantidad;
+    }
+
+    // Método que devuelve la representación en texto de un libro
+    public String toString() {
+        return "Título: " + titulo + ", Autor: " + autor + ", Cantidad: " + cantidad;
+    }
+}
+
+// Clase que gestiona la colección de libros en la biblioteca
+public class Biblioteca {
+    ArrayList<Libro> libros = new ArrayList<>();  // Lista dinámica para almacenar los libros
+    String usuario = "admin"; // Usuario predeterminado para iniciar sesión
+    String contrasena = "1234kenial"; // Contraseña predeterminada para iniciar sesión
+
+    // Método para agregar un nuevo libro a la colección
+    public void agregarLibro(String titulo, String autor, int cantidad) {
+        libros.add(new Libro(titulo, autor, cantidad));  // Se crea un nuevo libro y se añade a la lista
+        System.out.println("Libro agregado: " + titulo); // Mensaje de confirmación
+    }
+
+    // Método que lista todos los libros de la biblioteca
+    public void listarLibros() {
+        System.out.println("Libros en la biblioteca:");
+        for (Libro libro : libros) {  // Recorre la lista de libros
+            System.out.println(libro); // Muestra la información de cada libro
+        }
+    }
+
+    // Método que genera un informe del inventario total de libros
+    public void informeInventario() {
+        System.out.println("Informe de Inventario:");
+        int totalLibros = 0;
+        for (Libro libro : libros) {  // Suma las cantidades de todos los libros
+            totalLibros += libro.cantidad;
+        }
+        System.out.println("Total de libros en la biblioteca: " + totalLibros);  // Muestra el total
+    }
+
+    // Método para iniciar sesión con un usuario y contraseña
+    public boolean iniciarSesion(String usuario, String contrasena) {
+        return this.usuario.equals(usuario) && this.contrasena.equals(contrasena); // Verifica credenciales
+    }
+
+    // Método principal del programa
+    public static void main(String[] args) {
+        Biblioteca biblioteca = new Biblioteca();  // Crea una instancia de la biblioteca
+        Scanner scanner = new Scanner(System.in);
+
+        // Solicita las credenciales del usuario
+        System.out.println("Ingrese el usuario: ");
+        String usuario = scanner.nextLine();
+        System.out.println("Ingrese la contraseña: ");
+        String contrasena = scanner.nextLine();
+
+        // Verifica si las credenciales son correctas
+        if (biblioteca.iniciarSesion(usuario, contrasena)) {
+            String comando;
+            do {
+                // Solicita un comando al usuario (agregar, listar, informe, salir)
+                System.out.println("Ingrese un comando (agregar/listar/informe/salir): ");
+                comando = scanner.nextLine();
+                switch (comando) {
+                    case "agregar":
+                        // Solicita los datos del libro a agregar
+                        System.out.println("Ingrese el título del libro: ");
+                        String titulo = scanner.nextLine();
+                        System.out.println("Ingrese el autor del libro: ");
+                        String autor = scanner.nextLine();
+                        System.out.println("Ingrese la cantidad del libro: ");
+                        int cantidad = scanner.nextInt();
+                        scanner.nextLine(); // Limpia el buffer
+                        biblioteca.agregarLibro(titulo, autor, cantidad); // Agrega el libro
+                        break;
+                    case "listar":
+                        biblioteca.listarLibros(); // Muestra la lista de libros
+                        break;
+                    case "informe":
+                        biblioteca.informeInventario(); // Genera y muestra el informe del inventario
+                        break;
+                    case "salir":
+                        System.out.println("Saliendo..."); // Mensaje de salida
+                        break;
+                    default:
+                        System.out.println("Comando desconocido."); // Mensaje si se ingresa un comando no válido
+                }
+            } while (!comando.equals("salir"));  // Repite hasta que se ingrese el comando "salir"
+        } else {
+            System.out.println("Usuario o contraseña incorrectos."); // Mensaje si las credenciales son incorrectas
+        }
+
+        scanner.close();  // Cierra el escáner
+    }
+}
